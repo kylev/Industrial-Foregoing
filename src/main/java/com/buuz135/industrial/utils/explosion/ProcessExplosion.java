@@ -21,7 +21,7 @@
  */
 package com.buuz135.industrial.utils.explosion;
 
-import com.buuz135.industrial.IndustrialForegoing;
+import com.mojang.logging.LogUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
@@ -50,7 +50,7 @@ import java.util.function.Consumer;
  */
 public class ProcessExplosion {
 
-    //public static DamageSource fusionExplosion = new DamageSource("damage.if.nuke").setExplosion().bypassArmor().setIsFire();
+    private static final org.slf4j.Logger LOGGER = LogUtils.getLogger();
 
     /**
      * The origin of the explosion.
@@ -102,7 +102,7 @@ public class ProcessExplosion {
         this.angularResistance = new double[121];
         Arrays.fill(angularResistance, 100);
 
-        IndustrialForegoing.LOGGER.info("Explosion Calculation Started for " + radius + " Block radius detonation! by " + owner);
+        LOGGER.info("Explosion Calculation Started for " + radius + " Block radius detonation! by " + owner);
         maxRadius = radius;
         lavaState = Blocks.LAVA.defaultBlockState();
     }
@@ -122,9 +122,9 @@ public class ProcessExplosion {
             updateCalculation();
             t = System.currentTimeMillis() - t;
             calcWait = t / 40;
-            IndustrialForegoing.LOGGER.debug("Calculation Progress: " + Mth.floor((((double) radius / (double) maxRadius) * 100D)) + "% " + (Runtime.getRuntime().freeMemory() / 1000000));
+            LOGGER.debug("Calculation Progress: " + Mth.floor((((double) radius / (double) maxRadius) * 100D)) + "% " + (Runtime.getRuntime().freeMemory() / 1000000));
             if (calcWait > 0) {
-                IndustrialForegoing.LOGGER.debug("Explosion Calc loop took " + t + "ms! Waiting " + calcWait + " ticks before continuing");
+                LOGGER.debug("Explosion Calc loop took " + t + "ms! Waiting " + calcWait + " ticks before continuing");
             }
             if (progressMon != null) {
                 progressMon.accept((double) radius / (double) maxRadius);
@@ -192,7 +192,7 @@ public class ProcessExplosion {
         scannedCache = new HashSet<>();
 
         if (radius >= maxRadius) {
-            IndustrialForegoing.LOGGER.info("Explosion Calculation Completed in " + (System.currentTimeMillis() - startTime) / 1000 + "s");
+            LOGGER.info("Explosion Calculation Completed in " + (System.currentTimeMillis() - startTime) / 1000 + "s");
             calculationComplete = true;
         }
     }
@@ -345,7 +345,7 @@ public class ProcessExplosion {
 
         long l = System.currentTimeMillis();
 
-        IndustrialForegoing.LOGGER.debug("Removing Blocks!");
+        LOGGER.debug("Removing Blocks!");
         //LogHelper.startTimer("Adding Blocks For Removal");
         final BlockPos pos = new BlockPos((int) origin.x(), (int) origin.y(), (int) origin.z());
         new Thread(() -> {
@@ -377,14 +377,14 @@ public class ProcessExplosion {
         //LogHelper.stopTimer();
         //LogHelper.startTimer("Adding update Blocks");
         removalHelper.addBlocksForUpdate(blocksToUpdate);
-        IndustrialForegoing.LOGGER.debug("Blocks Removed: " + i);
+        LOGGER.debug("Blocks Removed: {}", i);
         //LogHelper.stopTimer();
 
         removalHelper.finish();
 
         isDead = true;
         detonated = true;
-        IndustrialForegoing.LOGGER.debug("Total explosion time: " + (System.currentTimeMillis() - l) / 1000D + "s");
+        LOGGER.debug("Total explosion time: " + (System.currentTimeMillis() - l) / 1000D + "s");
         return true;
     }
 

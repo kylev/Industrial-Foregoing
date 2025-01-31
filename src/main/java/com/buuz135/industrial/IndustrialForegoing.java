@@ -47,6 +47,8 @@ import com.hrznstudio.titanium.network.locator.PlayerInventoryFinder;
 import com.hrznstudio.titanium.reward.Reward;
 import com.hrznstudio.titanium.reward.RewardGiver;
 import com.hrznstudio.titanium.reward.RewardManager;
+import com.mojang.logging.LogUtils;
+
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.resources.model.ModelResourceLocation;
@@ -78,8 +80,6 @@ import net.neoforged.neoforge.data.event.GatherDataEvent;
 import net.neoforged.neoforge.event.server.ServerStartingEvent;
 import net.neoforged.neoforge.registries.NewRegistryEvent;
 import net.neoforged.neoforgespi.language.IModInfo;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -92,7 +92,7 @@ public class IndustrialForegoing extends ModuleController {
     private static CommonProxy proxy;
     private static HashMap<String, IFFakePlayer> worldFakePlayer = new HashMap<>();
     public static NetworkHandler NETWORK = new NetworkHandler(Reference.MOD_ID);
-    public static Logger LOGGER = LogManager.getLogger(Reference.MOD_ID);
+    private static final org.slf4j.Logger LOGGER = LogUtils.getLogger();
     public static IndustrialForegoing INSTANCE;
     public static Reward CAT_EARS;
     public static List<String> OWN_MODS_LOADED = new ArrayList<>();
@@ -128,7 +128,7 @@ public class IndustrialForegoing extends ModuleController {
             }, new String[]{"normal", "cat", "spooky", "snowy"});
             giver.addReward(CAT_EARS);
         } catch (MalformedURLException e) {
-            LOGGER.catching(e);
+            LOGGER.warn("Bad url, no ears.", e);
         }
 
         LaserDrillRarity.init();

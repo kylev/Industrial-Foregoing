@@ -29,6 +29,7 @@ import com.buuz135.industrial.module.ModuleCore;
 import com.buuz135.industrial.module.ModuleTool;
 import com.buuz135.industrial.recipe.DissolutionChamberRecipe;
 import com.hrznstudio.titanium.tab.TitaniumTab;
+import com.mojang.logging.LogUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.world.InteractionResult;
@@ -43,6 +44,7 @@ import java.util.Optional;
 
 public class ItemInfinityNuke extends ItemInfinity {
 
+    private static final org.slf4j.Logger LOGGER = LogUtils.getLogger();
     public static int POWER_CONSUMPTION = 100000;
     public static int FUEL_CONSUMPTION = 30;
 
@@ -63,7 +65,7 @@ public class ItemInfinityNuke extends ItemInfinity {
         entity.absMoveTo(blockPos.getX() + 0.5, blockPos.getY(), blockPos.getZ() + 0.5, 0, 0);
         context.getPlayer().setItemInHand(context.getHand(), ItemStack.EMPTY);
         context.getLevel().addFreshEntity(entity);
-        IndustrialForegoing.LOGGER.info(context.getPlayer().getUUID() + " (" + context.getPlayer().getDisplayName().toString() + ") placed an Infinity Nuke");
+        LOGGER.info("{} ({}) placed an Infinity Nuke", context.getPlayer().getUUID(), context.getPlayer().getDisplayName().toString());
         return InteractionResult.SUCCESS;
     }
 

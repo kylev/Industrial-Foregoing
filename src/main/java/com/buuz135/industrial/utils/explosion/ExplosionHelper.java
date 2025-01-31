@@ -21,8 +21,8 @@
  */
 package com.buuz135.industrial.utils.explosion;
 
-import com.buuz135.industrial.IndustrialForegoing;
 import com.buuz135.industrial.utils.BlockUtils;
+import com.mojang.logging.LogUtils;
 import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.protocol.game.ClientboundLevelChunkWithLightPacket;
@@ -45,6 +45,7 @@ import java.util.*;
  */
 public class ExplosionHelper {
 
+    private static final org.slf4j.Logger LOGGER = LogUtils.getLogger();
     private static final BlockState AIR = Blocks.AIR.defaultBlockState();
     private final ServerLevel serverWorld;
     //private Map<Integer, LinkedHashSet<Integer>> radialRemovalMap = new HashMap<>();
@@ -115,7 +116,7 @@ public class ExplosionHelper {
      * Call when finished removing blocks to calculate lighting and send chunk updates to the client.
      */
     public void finish() {
-        IndustrialForegoing.LOGGER.debug("EH: finish");
+        LOGGER.debug("EH: finish");
         RemovalProcess process = new RemovalProcess(this);
         ExplosionTickHandler.removalProcessList.add(process);
     }
@@ -152,7 +153,7 @@ public class ExplosionHelper {
             long startTime = Util.getMillis();
             HashSet<LevelChunk> chunks = new HashSet<>();
             while (Util.getMillis() - startTime < 40 && helper.toRemove.size() > 0) {
-                IndustrialForegoing.LOGGER.debug("Processing chunks at rad: " + index);
+                LOGGER.debug("Processing chunks at radius {}", index);
                 HashSet<Long> set = helper.toRemove.removeFirst();
                 for (long pos : set) {
                     BlockPos blockPos = BlockPos.of(pos);
@@ -172,9 +173,9 @@ public class ExplosionHelper {
                 if (blocksToUpdatePointer < helper.blocksToUpdate.size()) {
                     updateBlocks();
                 } else {
-                    IndustrialForegoing.LOGGER.info("Explosion Completed in " + (System.currentTimeMillis() - start) / 1000 + "s");
+                    LOGGER.info("Explosion completed in {}s", (System.currentTimeMillis() - start) / 1000);
                     isDead = true;
-                    IndustrialForegoing.LOGGER.info("Explosion done");
+                    LOGGER.info("Explosion done");
                 }
 
             }
@@ -196,7 +197,7 @@ public class ExplosionHelper {
         }
 
         private void updateBlocks() {
-            IndustrialForegoing.LOGGER.debug("Updating Blocks");
+            LOGGER.debug("Updating Blocks");
             int amount = 1000;
             for (int i = 0; i < amount; i++) {
                 if (blocksToUpdatePointer + i < helper.blocksToUpdate.size()) {
@@ -209,7 +210,7 @@ public class ExplosionHelper {
                         }
                         state.onNeighborChange(helper.serverWorld, blockPos, blockPos.above());
                     } catch (Throwable e) {
-                        IndustrialForegoing.LOGGER.error(e);
+                        LOGGER.error("updateBlocks failure ignored",e);
                     }
                 }
             }
