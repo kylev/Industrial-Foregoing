@@ -46,6 +46,7 @@ import com.hrznstudio.titanium.client.screen.addon.StateButtonInfo;
 import com.hrznstudio.titanium.component.button.ButtonComponent;
 import com.hrznstudio.titanium.component.fluid.FluidTankComponent;
 import com.hrznstudio.titanium.event.handler.EventManager;
+import com.hrznstudio.titanium.item.BasicItem;
 import com.hrznstudio.titanium.itemstack.ItemStackHarnessRegistry;
 import com.hrznstudio.titanium.network.locator.LocatorFactory;
 import com.hrznstudio.titanium.network.locator.PlayerInventoryFinder;
@@ -435,7 +436,7 @@ public class ItemInfinityBackpack extends ItemInfinity {
     }
 
     @Override
-    public void addTooltipDetails(@Nullable Key key, ItemStack stack, List<Component> tooltip, boolean advanced) {
+    public void addTooltipDetails(@Nullable BasicItem.Key key, ItemStack stack, List<Component> tooltip, boolean advanced) {
         //tooltip.add(stack.getOrCreateTag().toFormattedComponent());
         tooltip.add(Component.literal(ChatFormatting.GRAY + Component.translatable("text.industrialforegoing.tooltip.can_hold").getString() + ": " + ChatFormatting.DARK_AQUA + NumberFormat.getInstance(Locale.ROOT).format(getSlotSize(stack)) + ChatFormatting.GRAY + " " + Component.translatable("text.industrialforegoing.tooltip.items").getString()));
         super.addTooltipDetails(key, stack, tooltip, advanced);

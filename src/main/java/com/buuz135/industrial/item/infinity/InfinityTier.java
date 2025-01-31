@@ -25,10 +25,15 @@ package com.buuz135.industrial.item.infinity;
 import com.mojang.serialization.Codec;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
+import net.minecraft.tags.TagKey;
 import net.minecraft.util.StringRepresentable;
+import net.minecraft.world.item.Tier;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.level.block.Block;
+
 import org.apache.commons.lang3.tuple.Pair;
 
-public enum InfinityTier implements StringRepresentable {
+public enum InfinityTier implements StringRepresentable, Tier {
     POOR("poor", 0, 0, ChatFormatting.GRAY, 0x7c7c7a),//1x1
     COMMON("common", 4_000_000, 1, ChatFormatting.WHITE, 0xFFFFFF), //3x3
     UNCOMMON("uncommon", 16_000_000, 2, ChatFormatting.GREEN, 0x1ce819), //5x5
@@ -122,6 +127,42 @@ public enum InfinityTier implements StringRepresentable {
     @Override
     public String getSerializedName() {
         return this.name;
+    }
+
+    @Override
+    public float getAttackDamageBonus() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getAttackDamageBonus'");
+    }
+
+    @Override
+    public int getEnchantmentValue() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getEnchantmentValue'");
+    }
+
+    @Override
+    public TagKey<Block> getIncorrectBlocksForDrops() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getIncorrectBlocksForDrops'");
+    }
+
+    @Override
+    public Ingredient getRepairIngredient() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getRepairIngredient'");
+    }
+
+    @Override
+    public float getSpeed() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getSpeed'");
+    }
+
+    @Override
+    public int getUses() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getUses'");
     }
 }
 

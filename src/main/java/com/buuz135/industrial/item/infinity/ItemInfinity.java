@@ -28,6 +28,7 @@ import com.buuz135.industrial.proxy.network.BackpackOpenedMessage;
 import com.buuz135.industrial.utils.IFAttachments;
 import com.buuz135.industrial.utils.Reference;
 import com.hrznstudio.titanium.api.IFactory;
+import com.hrznstudio.titanium.api.IRecipeProvider;
 import com.hrznstudio.titanium.api.ISpecialCreativeTabItem;
 import com.hrznstudio.titanium.api.client.AssetTypes;
 import com.hrznstudio.titanium.api.client.IScreenAddon;
@@ -40,6 +41,7 @@ import com.hrznstudio.titanium.component.button.ArrowButtonComponent;
 import com.hrznstudio.titanium.component.button.ButtonComponent;
 import com.hrznstudio.titanium.component.fluid.FluidTankComponent;
 import com.hrznstudio.titanium.container.BasicAddonContainer;
+import com.hrznstudio.titanium.item.BasicItem;
 import com.hrznstudio.titanium.itemstack.ItemStackHarnessRegistry;
 import com.hrznstudio.titanium.network.IButtonHandler;
 import com.hrznstudio.titanium.network.locator.LocatorFactory;
@@ -68,6 +70,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerLevelAccess;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TieredItem;
 import net.minecraft.world.item.UseAnim;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
@@ -92,15 +95,21 @@ import java.util.Optional;
 import java.util.function.BiFunction;
 import java.util.function.Supplier;
 
-public class ItemInfinity extends IFCustomItem implements MenuProvider, IButtonHandler, IInfinityDrillScreenAddons, ISpecialCreativeTabItem, IScreenInfoProvider {
+public abstract class ItemInfinity extends TieredItem implements MenuProvider, IButtonHandler, IInfinityDrillScreenAddons, ISpecialCreativeTabItem, IScreenInfoProvider, IRecipeProvider {
 
     private final int powerConsumption;
     private final int biofuelConsumption;
     private final boolean usesDepth;
     private boolean usesArea;
+    public ItemInfinity(String name, TitaniumTab tab, Properties builder, int powerConsumption, int biofuelConsumption, boolean usesDepth) {
+        // TODO remove compatability thingy.
+        this(name, tab, InfinityTier.POOR, builder, powerConsumption, biofuelConsumption, usesDepth);
+    }
 
-    public ItemInfinity(String name, TitaniumTab group, Properties builder, int powerConsumption, int biofuelConsumption, boolean usesDepth) {
-        super(name, group, builder);
+    public ItemInfinity(String name, TitaniumTab tab, InfinityTier tier, Properties builder, int powerConsumption, int biofuelConsumption, boolean usesDepth) {
+        super(tier, builder);
+        tab.getTabList().add(this);
+
         this.powerConsumption = powerConsumption;
         this.biofuelConsumption = biofuelConsumption;
         this.usesDepth = usesDepth;
@@ -214,10 +223,11 @@ public class ItemInfinity extends IFCustomItem implements MenuProvider, IButtonH
         return !checker.get().get() ? 0xcb00ff /*Purple*/ : 0x00d0ff /*Cyan*/;
     }
 
-    @Override
-    public boolean hasTooltipDetails(@Nullable Key key) {
-        return key == null;
-    }
+    // TODO from BasicItem
+    // @Override
+    // public boolean hasTooltipDetails(@Nullable BasicItem.Key key) {
+    //     return key == null;
+    // }
 
     public int getFuelFromStack(ItemStack stack) {
         int fuelAmount = 0;
@@ -274,8 +284,9 @@ public class ItemInfinity extends IFCustomItem implements MenuProvider, IButtonH
         stack.set(IFAttachments.INFINITY_ITEM_SELECTED_TIER, tier);
     }
 
-    @Override
-    public void addTooltipDetails(@Nullable Key key, ItemStack stack, List<Component> tooltip, boolean advanced) {
+    // TODO from BasicItem
+    // @Override
+    public void addTooltipDetails(@Nullable BasicItem.Key key, ItemStack stack, List<Component> tooltip, boolean advanced) {
         long power = getPowerFromStack(stack);
         Pair<InfinityTier, InfinityTier> braquet = InfinityTier.getTierBraquet(power);
         InfinityTier current = getSelectedTier(stack);
@@ -373,10 +384,10 @@ public class ItemInfinity extends IFCustomItem implements MenuProvider, IButtonH
         }
     }
 
-    @Override
-    public void registerRecipe(RecipeOutput consumer) {
+    // @Override
+    // public void registerRecipe(RecipeOutput consumer) {
 
-    }
+    // }
 
     @OnlyIn(Dist.CLIENT)
     @Override
@@ -442,4 +453,3 @@ public class ItemInfinity extends IFCustomItem implements MenuProvider, IButtonH
         };
     }
 }
-    
