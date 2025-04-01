@@ -104,13 +104,18 @@ public class ItemInfinityHammer extends ItemInfinity {
 
     public ItemInfinityHammer(TitaniumTab group) {
         //.addToolType(ToolType.get("sword"), 1)
-        super("infinity_hammer", group, new Properties().stacksTo(1), POWER_CONSUMPTION, FUEL_CONSUMPTION, true);
+        super("infinity_hammer", group, new Properties().stacksTo(1), POWER_CONSUMPTION, FUEL_CONSUMPTION);
     }
 
     public static ItemStack createHead(GameProfile gameProfile) {
         ItemStack stack = new ItemStack(Items.PLAYER_HEAD);
         stack.set(DataComponents.PROFILE, new ResolvableProfile(gameProfile));
         return stack;
+    }
+
+    @Override
+    public boolean usesDepth() {
+        return true;
     }
 
     @Override

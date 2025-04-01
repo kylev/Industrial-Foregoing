@@ -76,7 +76,7 @@ public class ItemInfinityLauncher extends ItemInfinity {
     public static String PLUNGER_NBT = "Plunger";
 
     public ItemInfinityLauncher(TitaniumTab group) {
-        super("infinity_launcher", group, new Properties().stacksTo(1), POWER_CONSUMPTION, FUEL_CONSUMPTION, false);
+        super("infinity_launcher", group, new Properties().stacksTo(1), POWER_CONSUMPTION, FUEL_CONSUMPTION);
         this.disableArea();
     }
 

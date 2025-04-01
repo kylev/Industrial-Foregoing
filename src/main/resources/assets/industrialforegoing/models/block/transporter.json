@@ -1,5 +1,6 @@
 {
-  "textures": {
+   "parent": "industrialforegoing:block/base_block",
+   "textures": {
     "particle": "industrialforegoing:block/base/bottom"
   }
 }

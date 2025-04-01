@@ -7,32 +7,21 @@
   ],
   "parent": "minecraft:recipes/root",
   "criteria": {
-    "has_item": {
-      "conditions": {
-        "items": [
-          {
-            "items": "#c:chests/wooden"
-          }
-        ]
-      },
-      "trigger": "minecraft:inventory_changed"
-    },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "industrialforegoing:infinity_backpack"
+        "recipe": "industrialforegoing:dissolution_chamber/infinity_backpack"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
   },
   "requirements": [
     [
-      "has_the_recipe",
-      "has_item"
+      "has_the_recipe"
     ]
   ],
   "rewards": {
     "recipes": [
-      "industrialforegoing:infinity_backpack"
+      "industrialforegoing:dissolution_chamber/infinity_backpack"
     ]
   }
 }

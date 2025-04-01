@@ -33,6 +33,8 @@ import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 import com.hrznstudio.titanium.tab.TitaniumTab;
+import com.mojang.logging.LogUtils;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.data.recipes.RecipeOutput;
@@ -56,6 +58,8 @@ import java.util.concurrent.TimeUnit;
 
 public class ItemInfinitySaw extends ItemInfinity {
 
+    private static final org.slf4j.Logger LOGGER = LogUtils.getLogger();
+
     public static LoadingCache<Pair<Level, BlockPos>, TreeCache> SAW_CACHE = CacheBuilder.newBuilder().expireAfterAccess(5, TimeUnit.MINUTES).build(new CacheLoader<Pair<Level, BlockPos>, TreeCache>() {
         @Override
         public TreeCache load(Pair<Level, BlockPos> key) throws Exception {
@@ -68,9 +72,16 @@ public class ItemInfinitySaw extends ItemInfinity {
     public static int POWER_CONSUMPTION = 10000;
     public static int FUEL_CONSUMPTION = 3;
 
+    private final String name;
+
     public ItemInfinitySaw(TitaniumTab group) {
-//        .addToolType(ToolAction.AXE, 3)
-        super("infinity_saw", group, new Properties().stacksTo(1), POWER_CONSUMPTION, FUEL_CONSUMPTION, false);
+        this("infinity_saw", group, InfinityTier.COMMON);
+        LOGGER.warn("Loading classic saw");
+    }
+
+    public ItemInfinitySaw(String name, TitaniumTab group, InfinityTier tier) {
+        super(name, group, tier, new Properties().stacksTo(1), POWER_CONSUMPTION, FUEL_CONSUMPTION);
+        this.name = name;
     }
 
     @Override
@@ -123,7 +134,7 @@ public class ItemInfinitySaw extends ItemInfinity {
 
     @Override
     public void registerRecipe(RecipeOutput consumer) {
-        DissolutionChamberRecipe.createRecipe(consumer, "infinity_saw", new DissolutionChamberRecipe(List.of(
+        DissolutionChamberRecipe.createRecipe(consumer, this.name, new DissolutionChamberRecipe(List.of(
                 Ingredient.of(new ItemStack(Items.DIAMOND_BLOCK)),
                 Ingredient.of(new ItemStack(Items.DIAMOND_PICKAXE)),
                 Ingredient.of(new ItemStack(Items.DIAMOND_AXE)),

@@ -88,7 +88,12 @@ public class ItemInfinityTrident extends ItemInfinity {
     public static int FUEL_CONSUMPTION = 30;
 
     public ItemInfinityTrident(TitaniumTab group) {
-        super("infinity_trident", group, new Properties().stacksTo(1), POWER_CONSUMPTION, FUEL_CONSUMPTION, true);
+        super("infinity_trident", group, new Properties().stacksTo(1), POWER_CONSUMPTION, FUEL_CONSUMPTION);
+    }
+
+    @Override
+    public boolean usesDepth() {
+        return true;
     }
 
     @Override

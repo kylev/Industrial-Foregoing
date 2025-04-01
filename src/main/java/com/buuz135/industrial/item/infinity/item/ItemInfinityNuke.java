@@ -41,13 +41,16 @@ import net.neoforged.neoforge.fluids.FluidStack;
 import java.util.List;
 import java.util.Optional;
 
+import javax.annotation.Nonnegative;
+import javax.annotation.Nonnull;
+
 public class ItemInfinityNuke extends ItemInfinity {
 
     public static int POWER_CONSUMPTION = 100000;
     public static int FUEL_CONSUMPTION = 30;
 
     public ItemInfinityNuke(TitaniumTab group) {
-        super("infinity_nuke", group, new Properties().stacksTo(1), POWER_CONSUMPTION, FUEL_CONSUMPTION, true);
+        super("infinity_nuke", group, new Properties().stacksTo(1), POWER_CONSUMPTION, FUEL_CONSUMPTION);
     }
 
     public static int getRadius(ItemStack stack) {
@@ -57,7 +60,12 @@ public class ItemInfinityNuke extends ItemInfinity {
     }
 
     @Override
-    public InteractionResult useOn(UseOnContext context) {
+    public boolean usesDepth() {
+        return true;
+    }
+
+    @Override
+    public InteractionResult useOn(@Nonnull UseOnContext context) {
         InfinityNukeEntity entity = new InfinityNukeEntity(context.getLevel(), context.getPlayer(), context.getItemInHand().copy());
         BlockPos blockPos = context.getClickedPos().relative(context.getClickedFace());
         entity.absMoveTo(blockPos.getX() + 0.5, blockPos.getY(), blockPos.getZ() + 0.5, 0, 0);

@@ -1,6 +1,6 @@
 {
   "name": "Addons",
-  "icon": "industrialforegoing:range_addon11",
+  "icon": "industrialforegoing:range_addon_tier_11",
   "category": "industrialforegoing:basics",
   "sortnum": 5,
   "read_by_default": true,

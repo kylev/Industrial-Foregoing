@@ -115,7 +115,7 @@ public class ItemInfinityBackpack extends ItemInfinity {
 
 
     public ItemInfinityBackpack() {
-        super("infinity_backpack", ModuleTool.TAB_TOOL, new Properties().stacksTo(1), POWER_CONSUMPTION, FUEL_CONSUMPTION, false);
+        super("infinity_backpack", ModuleTool.TAB_TOOL, new Properties().stacksTo(1), POWER_CONSUMPTION, FUEL_CONSUMPTION);
         this.disableArea();
         EventManager.forge(ItemEntityPickupEvent.Pre.class).filter(entityItemPickupEvent -> !entityItemPickupEvent.getItemEntity().getItem().isEmpty()).process(entityItemPickupEvent -> {
             for (PlayerInventoryFinder.Target target : findAllBackpacks(entityItemPickupEvent.getPlayer())) {

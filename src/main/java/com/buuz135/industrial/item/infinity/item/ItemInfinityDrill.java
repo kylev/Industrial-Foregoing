@@ -66,7 +66,7 @@ public class ItemInfinityDrill extends ItemInfinity {
 
     public ItemInfinityDrill(TitaniumTab group) {
         //.addToolType(ToolType.PICKAXE, 6).addToolType(ToolType.SHOVEL, 6)
-        super("infinity_drill", group, new Properties().stacksTo(1), POWER_CONSUMPTION, FUEL_CONSUMPTION, false);
+        super("infinity_drill", group, new Properties().stacksTo(1), POWER_CONSUMPTION, FUEL_CONSUMPTION);
     }
 
     @Override

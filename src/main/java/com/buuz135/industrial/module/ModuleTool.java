@@ -22,6 +22,8 @@
 
 package com.buuz135.industrial.module;
 
+import java.util.List;
+
 import com.buuz135.industrial.block.tool.InfinityBackpackBlock;
 import com.buuz135.industrial.block.tool.tile.InfinityBackpackTile;
 import com.buuz135.industrial.entity.InfinityLauncherProjectileEntity;
@@ -31,6 +33,7 @@ import com.buuz135.industrial.item.MeatFeederItem;
 import com.buuz135.industrial.item.MobImprisonmentToolItem;
 import com.buuz135.industrial.item.infinity.InfinityStackHolder;
 import com.buuz135.industrial.item.infinity.InfinityTankStorage;
+import com.buuz135.industrial.item.infinity.InfinityTier;
 import com.buuz135.industrial.item.infinity.ItemInfinity;
 import com.buuz135.industrial.item.infinity.item.*;
 import com.buuz135.industrial.utils.BlockUtils;
@@ -75,6 +78,7 @@ public class ModuleTool implements IModule {
     public static DeferredHolder<Item, Item> INFINITY_DRILL;
     public static DeferredHolder<Item, Item> MOB_ESSENCE_TOOL;
     public static DeferredHolder<Item, Item> INFINITY_SAW;
+    public static DeferredHolder<Item, Item> INFINITY_SAW_EPIC;
     public static DeferredHolder<Item, Item> INFINITY_HAMMER;
     public static DeferredHolder<Item, Item> INFINITY_TRIDENT;
     public static DeferredHolder<Item, Item> INFINITY_BACKPACK;
@@ -97,6 +101,8 @@ public class ModuleTool implements IModule {
         INFINITY_DRILL = registryHelper.registerGeneric(Registries.ITEM, "infinity_drill", () -> new ItemInfinityDrill(TAB_TOOL));
         //features.add(Feature.builder("mob_essence_tool").content(Registries.ITEM, MOB_ESSENCE_TOOL = new MobEssenceToolItem(TAB_TOOL)));
         INFINITY_SAW = registryHelper.registerGeneric(Registries.ITEM, "infinity_saw", () -> new ItemInfinitySaw(TAB_TOOL));
+        INFINITY_SAW_EPIC = registryHelper.registerGeneric(Registries.ITEM, "infinity_saw_epic", () -> new ItemInfinitySaw("infinity_saw_poor", TAB_TOOL, InfinityTier.EPIC));
+
         INFINITY_HAMMER = registryHelper.registerGeneric(Registries.ITEM, "infinity_hammer", () -> new ItemInfinityHammer(TAB_TOOL));
         INFINITY_TRIDENT = registryHelper.registerGeneric(Registries.ITEM, "infinity_trident", () -> new ItemInfinityTrident(TAB_TOOL));
         TRIDENT_ENTITY_TYPE = registryHelper.registerEntityType("trident_entity", () -> EntityType.Builder.<InfinityTridentEntity>of(InfinityTridentEntity::new, MobCategory.MISC).sized(0.5F, 0.5F)
@@ -119,7 +125,9 @@ public class ModuleTool implements IModule {
         NUKE_ARMING = registryHelper.registerGeneric(Registries.SOUND_EVENT, "nuke_arming", () -> SoundEvent.createFixedRangeEvent(ResourceLocation.fromNamespaceAndPath(Reference.MOD_ID, "nuke_arming"), 16));
         NUKE_EXPLOSION = registryHelper.registerGeneric(Registries.SOUND_EVENT, "nuke_explosion", () -> SoundEvent.createFixedRangeEvent(ResourceLocation.fromNamespaceAndPath(Reference.MOD_ID, "nuke_explosion"), 128));
 
-        ItemStackHarnessRegistry.register(INFINITY_SAW, stack -> new ItemStackHarness(stack, null, (IButtonHandler) stack.getItem(), Capabilities.EnergyStorage.ITEM, Capabilities.FluidHandler.ITEM, CapabilityItemStackHolder.ITEMSTACK_HOLDER_CAPABILITY));
+        for (var thingy : List.of(INFINITY_SAW, INFINITY_SAW_EPIC)) {
+            ItemStackHarnessRegistry.register(thingy, stack -> new ItemStackHarness(stack, null, (IButtonHandler) stack.getItem(), Capabilities.EnergyStorage.ITEM, Capabilities.FluidHandler.ITEM, CapabilityItemStackHolder.ITEMSTACK_HOLDER_CAPABILITY));
+        }
         ItemStackHarnessRegistry.register(INFINITY_DRILL, stack -> new ItemStackHarness(stack, null, (IButtonHandler) stack.getItem(), Capabilities.EnergyStorage.ITEM, Capabilities.FluidHandler.ITEM, CapabilityItemStackHolder.ITEMSTACK_HOLDER_CAPABILITY));
         ItemStackHarnessRegistry.register(INFINITY_HAMMER, stack -> new ItemStackHarness(stack, null, (IButtonHandler) stack.getItem(), Capabilities.EnergyStorage.ITEM, Capabilities.FluidHandler.ITEM, CapabilityItemStackHolder.ITEMSTACK_HOLDER_CAPABILITY));
         ItemStackHarnessRegistry.register(INFINITY_TRIDENT, stack -> new ItemStackHarness(stack, null, (IButtonHandler) stack.getItem(), Capabilities.EnergyStorage.ITEM, Capabilities.FluidHandler.ITEM, CapabilityItemStackHolder.ITEMSTACK_HOLDER_CAPABILITY));
@@ -136,15 +144,15 @@ public class ModuleTool implements IModule {
                     return itemInfinity.getEnergyConstructor(o).create();
                 }
                 return null;
-            }, INFINITY_SAW.get(), INFINITY_DRILL.get(), INFINITY_HAMMER.get(), INFINITY_TRIDENT.get(), INFINITY_BACKPACK.get(), INFINITY_LAUNCHER.get(), INFINITY_NUKE.get());
+            }, INFINITY_SAW.get(), INFINITY_SAW_EPIC.get(), INFINITY_DRILL.get(), INFINITY_HAMMER.get(), INFINITY_TRIDENT.get(), INFINITY_BACKPACK.get(), INFINITY_LAUNCHER.get(), INFINITY_NUKE.get());
             event.registerItem(Capabilities.FluidHandler.ITEM, (o, unused) -> {
                 if (o.getItem() instanceof ItemInfinity itemInfinity) {
                     return itemInfinity.getTankConstructor(o).create();
                 }
                 return null;
-            }, INFINITY_SAW.get(), INFINITY_DRILL.get(), INFINITY_HAMMER.get(), INFINITY_TRIDENT.get(), INFINITY_BACKPACK.get(), INFINITY_LAUNCHER.get(), INFINITY_NUKE.get());
+            }, INFINITY_SAW.get(), INFINITY_SAW_EPIC.get(), INFINITY_DRILL.get(), INFINITY_HAMMER.get(), INFINITY_TRIDENT.get(), INFINITY_BACKPACK.get(), INFINITY_LAUNCHER.get(), INFINITY_NUKE.get());
             event.registerItem(Capabilities.FluidHandler.ITEM, (o, unused) -> new InfinityTankStorage(o, new InfinityTankStorage.TankDefinition("meat", 512_000, 0, 0, fluidStack -> fluidStack.is(ModuleCore.MEAT.getSourceFluid()), false, true, FluidTankComponent.Type.SMALL, new FluidStack(ModuleCore.MEAT.getSourceFluid().get(), 1000))), MEAT_FEEDER.get());
-            event.registerItem(CapabilityItemStackHolder.ITEMSTACK_HOLDER_CAPABILITY, (o, unused) -> new InfinityStackHolder(), INFINITY_SAW.get(), INFINITY_DRILL.get(), INFINITY_HAMMER.get(), INFINITY_TRIDENT.get(), INFINITY_BACKPACK.get(), INFINITY_LAUNCHER.get(), INFINITY_NUKE.get());
+            event.registerItem(CapabilityItemStackHolder.ITEMSTACK_HOLDER_CAPABILITY, (o, unused) -> new InfinityStackHolder(), INFINITY_SAW.get(), INFINITY_SAW_EPIC.get(), INFINITY_DRILL.get(), INFINITY_HAMMER.get(), INFINITY_TRIDENT.get(), INFINITY_BACKPACK.get(), INFINITY_LAUNCHER.get(), INFINITY_NUKE.get());
             event.registerItem(Capabilities.ItemHandler.ITEM, (o, unused) -> {
                 if (o.getItem() instanceof ItemInfinityBackpack itemInfinity && o.has(IFAttachments.INFINITY_BACKPACK_ID)) {
                     String id = o.get(IFAttachments.INFINITY_BACKPACK_ID);
